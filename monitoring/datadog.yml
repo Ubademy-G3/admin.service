@@ -1,0 +1,9 @@
+hostname: admin-service
+listeners:
+  - name: docker
+config_providers:
+  - name: docker
+    polling: true
+    poll_interval: 1s
+process_config:
+    enabled: 'true'
