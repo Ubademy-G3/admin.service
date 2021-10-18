@@ -1,5 +1,8 @@
 const express = require("express");
 const { Client } = require("pg");
+const swaggerUi = require("swagger-ui-express");
+const swaggerDocument = require("./swagger.json");
+const admin = require("./infrastructure/routes/admin");
 
 const app = express();
 
@@ -24,8 +27,10 @@ if (process.env.NODE_ENV !== 'stage') {
 
 client.connect();
 
-app.get("/ping", (req, res) => res.send("Pong!"));
+app.use("/admin", admin);
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
+app.get("/ping", (req, res) => res.send("Pong!"));
 app.get("/status", (req, res) => client.query("SELECT NOW()", (err) => res.send({ service: "UP", db: err ? "DOWN" : "UP" })));
 
 app.listen(process.env.PORT, () => {
