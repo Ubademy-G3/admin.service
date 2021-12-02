@@ -19,7 +19,7 @@ client = TestClient(app)
 post_header = {"apikey": apikey}
 
 post_body = {
-    "name": "Courses"
+    "name": "Courses",
     "apikey": "hola"
 }
 
@@ -29,8 +29,8 @@ get_header = {"apikey": apikey, "microservice_id": "5122b737-f815-4e15-a56d-abbf
 return_from_get = Microservice(
     id="5122b737-f815-4e15-a56d-abbff2fee900",
     name="Courses",
-    name="hola",
-    state=MicroserviceStateEnum.draft,
+    apikey="hola",
+    state=MicroserviceStateEnum.active,
 )
 
 # Get all
@@ -40,8 +40,8 @@ return_from_get_all = [
     Microservice(
         id="5122b737-f815-4e15-a56d-abbff2fee900",
         name="Courses",
-        name="hola",
-        state=MicroserviceStateEnum.draft,
+        apikey="hola",
+        state=MicroserviceStateEnum.active,
     )
 ]
 
@@ -97,7 +97,7 @@ class MicroserviceMock(TestCase):
         mock_get_all.return_value = return_from_get_all
 
         response = client.get(
-            f"/microservices/",
+            "/microservices/",
             headers=get_all_header
         )
         assert response.status_code == 200, response.text
@@ -105,8 +105,8 @@ class MicroserviceMock(TestCase):
         assert data["amount"] == 1
         assert data["microservices"][0]["id"] == "5122b737-f815-4e15-a56d-abbff2fee900"
         assert data["microservices"][0]["name"] == "Courses"
-        assert data["microservices"][0]["name"] == "hola"
-        assert data["microservices"][0]["state"] == "draft"
+        assert data["microservices"][0]["apikey"] == "hola"
+        assert data["microservices"][0]["state"] == "active"
 
     @mock.patch.object(MicroserviceRepositoryPostgres, "delete_microservice")
     @mock.patch.object(MicroserviceRepositoryPostgres, "get_microservice")
