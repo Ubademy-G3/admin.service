@@ -65,13 +65,13 @@ jobs:
         run: heroku container:login
 
       - name: Tag container
-        run: docker tag admin.service registry.heroku.com/staging-admin-service/web
+        run: docker tag admin.service registry.heroku.com/staging-admin-service-app/web
 
       - name: Push container
-        run: docker push registry.heroku.com/staging-admin-service/web
+        run: docker push registry.heroku.com/staging-admin-service-app/web
 
       - name: Release container
-        run: heroku container:release web --app staging-admin-service
+        run: heroku container:release web --app staging-admin-service-app
 
       - name: Set PYTHON_ENV to stage
-        run: heroku config:set PYTHON_ENV=stage --app staging-admin-service
+        run: heroku config:set PYTHON_ENV=stage --app staging-admin-service-app
