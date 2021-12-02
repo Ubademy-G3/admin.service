@@ -15,7 +15,7 @@ def get_microservice(db, microservice_id):
 def get_microservice_by_name(db, name):
     microservice = mrp.get_microservice_by_name(db, name)
     if microservice is None:
-        raise NotFoundException("Microservice {}".format(microservice_id))
+        raise NotFoundException("Microservice {}".format(name))
     return MicroserviceSerializer.serialize(microservice)
 
 

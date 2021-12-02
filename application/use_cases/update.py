@@ -14,6 +14,9 @@ def update_microservice(db, microservice_id, new_args):
 
     microservice_to_update = mrp.get_microservice(db, microservice_id)
 
+    if not microservice_to_update:
+        raise NotFoundException("Microservice {}".format(microservice_id))
+
     if new_args.name is not None:
         microservice_to_update.name = new_args.name
 
