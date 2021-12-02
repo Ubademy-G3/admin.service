@@ -1,50 +1,49 @@
-version: '3'
-services: 
-  postgres:
-    image: postgres
-    environment:
-      - POSTGRES_PASSWORD=postgres
-      - POSTGRES_USER=postgres
-    expose:
-      - 5432
-    volumes:
-      - postgres_data:/var/lib/postgresql/data/
-    networks:
-      - my-network
-    restart: always
+version: '3.3'
 
-  node:
+services:
+  web:
     build: .
-    environment:
-      - PORT=3001
-      - DATABASE_URL=postgres://postgres:postgres@postgres:5432/postgres
-    ports:
-      - 3001:3001
+    command: |
+      bash -c 'while !</dev/tcp/db/5432; do sleep 1; done; uvicorn main:app --reload --workers 1 --host 0.0.0.0 --port 8000'
     volumes:
       - .:/app/
-      - /app/node_modules/
-      - /app/deploy/
-    depends_on:
-      - postgres
-    networks:
-      - my-network
-  
-  pgadmin:
-    image: dpage/pgadmin4
-    environment:
-      - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
-      - PGADMIN_DEFAULT_PASSWORD=admin
-      - PGADMIN_LISTEN_PORT=80
     ports:
-      - "5052:80"
+      - 8003:8000
+    environment:
+      - DATABASE_URL=postgresql://hello_fastapi:hello_fastapi@db/hello_fastapi_dev
     depends_on:
-      - postgres
+      - db
     networks:
       - my-network
-
+      - external-net
+  db:
+    image: postgres:13-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    expose:
+      - 5432
+    environment:
+      - POSTGRES_USER=hello_fastapi
+      - POSTGRES_PASSWORD=hello_fastapi
+      - POSTGRES_DB=hello_fastapi_dev
+    networks:
+      - my-network
+  pgadmin_admin:
+      image: dpage/pgadmin4
+      environment:
+        - PGADMIN_DEFAULT_EMAIL=pgadmin4@pgadmin.org
+        - PGADMIN_DEFAULT_PASSWORD=admin
+      ports:
+        - "5050:80"
+      depends_on:
+        - db
+      networks:
+        - my-network
+volumes:
+  postgres_data:
 networks:
   my-network:
     driver: bridge
-
-volumes:
-  postgres_data:
+  external-net:
+    external: 
+      name: ubademy

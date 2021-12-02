@@ -1,4 +1,4 @@
-hostname: admin-service
+hostname: ubademy-admin
 listeners:
   - name: docker
 config_providers:
@@ -7,3 +7,5 @@ config_providers:
     poll_interval: 1s
 process_config:
     enabled: 'true'
+
+python_version: 3
