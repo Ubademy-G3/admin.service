@@ -1,7 +1,7 @@
 # Admin Microservice
 
 [![CI](https://github.com/Ubademy-G3/admin.service/actions/workflows/default.yml/badge.svg)](https://github.com/Ubademy-G3/admin.service/actions/workflows/default.yml)
-[![codecov](https://codecov.io/gh/Ubademy-G3/admin.service/branch/main/graph/badge.svg?token=A3547H62WC)](https://codecov.io/gh/Ubademy-G3/admin.service)
+[![codecov](https://codecov.io/gh/Ubademy-G3/admin.service/branch/main/graph/badge.svg?token=N90QGLTQ0J)](https://codecov.io/gh/Ubademy-G3/admin.service)
 
 # File Structure:
 ```tree
