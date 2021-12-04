@@ -19,7 +19,7 @@ client = TestClient(app)
 post_header = {"apikey": apikey}
 
 post_body = {
-    "name": "Courses",
+    "name": "courses",
     "apikey": "hola"
 }
 
@@ -28,10 +28,36 @@ get_header = {"apikey": apikey, "microservice_id": "5122b737-f815-4e15-a56d-abbf
 
 return_from_get = Microservice(
     id="5122b737-f815-4e15-a56d-abbff2fee900",
-    name="Courses",
+    name="courses",
     apikey="hola",
     state=MicroserviceStateEnum.active,
 )
+
+# Get by name
+get_by_name_header = {"apikey": apikey, "name": "courses"}
+
+return_from_get_by_name = Microservice(
+    id="5122b737-f815-4e15-a56d-abbff2fee900",
+    name="courses",
+    apikey="hola",
+    state=MicroserviceStateEnum.active,
+)
+
+# Get by name list
+get_by_name_list_header = {"apikey": apikey}
+
+get_by_name_list_body = {
+    "name_list": ["courses"]
+}
+
+return_from_get_by_name_list = [
+    Microservice(
+        id="5122b737-f815-4e15-a56d-abbff2fee900",
+        name="courses",
+        apikey="hola",
+        state=MicroserviceStateEnum.active,
+    )
+]
 
 # Get all
 get_all_header = {"apikey": apikey}
@@ -39,7 +65,7 @@ get_all_header = {"apikey": apikey}
 return_from_get_all = [
     Microservice(
         id="5122b737-f815-4e15-a56d-abbff2fee900",
-        name="Courses",
+        name="courses",
         apikey="hola",
         state=MicroserviceStateEnum.active,
     )
@@ -71,7 +97,7 @@ class MicroserviceMock(TestCase):
         )
         assert response.status_code == 201, response.text
         data = response.json()
-        assert data["name"] == "Courses"
+        assert data["name"] == "courses"
         assert data["apikey"] == "hola"
         assert data["state"] == "active"
 
@@ -88,9 +114,43 @@ class MicroserviceMock(TestCase):
         assert response.status_code == 200, response.text
         data = response.json()
         assert data["id"] == microservice_id
-        assert data["name"] == "Courses"
+        assert data["name"] == "courses"
         assert data["apikey"] == "hola"
         assert data["state"] == "active"
+
+    @mock.patch.object(MicroserviceRepositoryPostgres, "get_microservice_by_name")
+    def test_get_microservice_by_name(self, mock_get_by_name):
+        mock_get_by_name.return_value = return_from_get_by_name
+
+        name = "courses"
+
+        response = client.get(
+            f"/microservices/name/{name}",
+            headers=get_by_name_header
+        )
+        assert response.status_code == 200, response.text
+        data = response.json()
+        assert data["id"] == "5122b737-f815-4e15-a56d-abbff2fee900"
+        assert data["name"] == "courses"
+        assert data["apikey"] == "hola"
+        assert data["state"] == "active"
+
+    @mock.patch.object(MicroserviceRepositoryPostgres, "get_microservices_by_name_list")
+    def test_get_microservices_by_name_list(self, mock_get_by_name_list):
+        mock_get_by_name_list.return_value = return_from_get_by_name_list
+
+        response = client.get(
+            "/microservices/name/",
+            data=json.dumps(get_by_name_list_body),
+            headers=get_by_name_list_header
+        )
+        assert response.status_code == 200, response.text
+        data = response.json()
+        assert data["amount"] == 1
+        assert data["microservices"][0]["id"] == "5122b737-f815-4e15-a56d-abbff2fee900"
+        assert data["microservices"][0]["name"] == "courses"
+        assert data["microservices"][0]["apikey"] == "hola"
+        assert data["microservices"][0]["state"] == "active"
 
     @mock.patch.object(MicroserviceRepositoryPostgres, "get_all_microservices")
     def test_get_all_microservices(self, mock_get_all):
@@ -104,7 +164,7 @@ class MicroserviceMock(TestCase):
         data = response.json()
         assert data["amount"] == 1
         assert data["microservices"][0]["id"] == "5122b737-f815-4e15-a56d-abbff2fee900"
-        assert data["microservices"][0]["name"] == "Courses"
+        assert data["microservices"][0]["name"] == "courses"
         assert data["microservices"][0]["apikey"] == "hola"
         assert data["microservices"][0]["state"] == "active"
 
@@ -140,6 +200,6 @@ class MicroserviceMock(TestCase):
         assert response.status_code == 200, response.text
         data = response.json()
         assert data["id"] == microservice_id
-        assert data["name"] == "Courses"
+        assert data["name"] == "courses"
         assert data["apikey"] == "hola"
         assert data["state"] == "blocked"
