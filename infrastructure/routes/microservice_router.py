@@ -1,6 +1,6 @@
 from fastapi import APIRouter, Header, Depends, Query
 from infrastructure.db.database import Session, get_db
-from typing import Optional
+from typing import Optional, List
 from application.controllers.microservice_controller import MicroserviceController
 from application.services.auth import auth_service
 from domain.microservice_model import (MicroservicePostBody, MicroserviceDB, MicroserviceList,
@@ -37,6 +37,16 @@ async def get_microservice_by_name(
 ):
     auth_service.check_api_key(apikey)
     return MicroserviceController.get_microservice_by_name(db, name)
+
+
+@router.get("/name/", response_model=MicroserviceList, status_code=200)
+async def get_microservices_by_name_list(
+    name_list: List[str] = Query(None),
+    db: Session = Depends(get_db),
+    apikey: str = Header(None),
+):
+    auth_service.check_api_key(apikey)
+    return MicroserviceController.get_microservices_by_name_list(db, name_list)
 
 
 @router.get("/", response_model=MicroserviceList, status_code=200)

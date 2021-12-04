@@ -15,6 +15,10 @@ class MicroserviceController:
         return get.get_microservice_by_name(db, name)
 
     @classmethod
+    def get_microservices_by_name_list(self, db, name_list):
+        return get.get_microservices_by_name_list(db, name_list)
+
+    @classmethod
     def get_all_microservices(self, db, state):
         return get.get_all_microservices(db, state)
 

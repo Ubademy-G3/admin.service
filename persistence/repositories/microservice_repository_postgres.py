@@ -14,6 +14,10 @@ class MicroserviceRepositoryPostgres:
         microservice = db.query(Microservice).filter(Microservice.name == name).first()
         return microservice
 
+    def get_microservices_by_name_list(self, db, name_list):
+        microservices = db.query(Microservice).filter(Microservice.name.in_(name_list)).all()
+        return microservices
+
     def get_all_microservices(self, db, state):
         query = db.query(Microservice)
         if state is not None:
