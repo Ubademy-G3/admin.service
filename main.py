@@ -1,5 +1,6 @@
 from fastapi import FastAPI
 import logging
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi import HTTPException
 from infrastructure.routes import microservice_router
@@ -13,6 +14,17 @@ if DATABASE_URL is not None:
 
 app = FastAPI(title="ubademy-adminservice", description="Admin service API")
 
+origins = [
+    "*",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 
 @app.exception_handler(HTTPException)
 async def http_exception_handler(request, exc):
