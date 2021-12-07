@@ -3,6 +3,7 @@ from application.serializers.microservice_serializer import MicroserviceSerializ
 from infrastructure.db.microservice_schema import Microservice, MicroserviceStateEnum
 from uuid import uuid4
 from exceptions.ubademy_exception import InvalidMicroserviceStateException
+from datetime import datetime
 
 
 mrp = MicroserviceRepositoryPostgres()
@@ -13,11 +14,16 @@ def add_microservice(db, args):
     if (args.state is not None and args.state not in ["active", "blocked", "taken_down"]):
         raise InvalidMicroserviceStateException(args.state)
 
+    if args.description is None:
+        args.description = "Non descriptive text"
+
     new_microservice = Microservice(
         id=uuid4(),
         name=args.name,
         apikey=args.apikey,
         state=MicroserviceStateEnum.active,
+        description=args.description,
+        timestamp=datetime.now(),
     )
 
     if(args.apikey == "blocked"):

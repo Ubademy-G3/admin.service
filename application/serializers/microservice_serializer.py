@@ -16,4 +16,6 @@ class MicroserviceSerializer:
             "name": microservice.name,
             "apikey": microservice.apikey,
             "state": state,
+            "description": microservice.description,
+            "timestamp": microservice.timestamp,
         }

@@ -2,6 +2,7 @@ from pydantic import BaseModel
 from uuid import UUID
 from typing import Optional, List
 import enum
+from datetime import datetime
 
 
 class MicroserviceStateEnum(enum.Enum):
@@ -14,6 +15,7 @@ class MicroservicePostBody(BaseModel):
     name: str
     apikey: str
     state: Optional[str]
+    description: Optional[str]
 
 
 class MicroserviceDB(BaseModel):
@@ -21,6 +23,8 @@ class MicroserviceDB(BaseModel):
     name: str
     apikey: str
     state: Optional[str]
+    description: str
+    timestamp: datetime
 
 
 class MicroserviceList(BaseModel):
@@ -32,3 +36,4 @@ class MicroservicePatch(BaseModel):
     name: Optional[str]
     apikey: Optional[str]
     state: Optional[str]
+    description: Optional[str]
