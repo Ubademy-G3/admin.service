@@ -34,7 +34,7 @@ return_from_get = Microservice(
     apikey="hola",
     state=MicroserviceStateEnum.active,
     description="hola",
-    timestamp=datetime.now()
+    timestamp=datetime.fromisoformat('2011-11-04T00:05:23.283333')
 )
 
 # Get by name
@@ -46,7 +46,7 @@ return_from_get_by_name = Microservice(
     apikey="hola",
     state=MicroserviceStateEnum.active,
     description="hola",
-    timestamp=datetime.now()
+    timestamp=datetime.fromisoformat('2011-11-04T00:05:23.283333')
 )
 
 # Get by name list
@@ -63,7 +63,7 @@ return_from_get_by_name_list = [
         apikey="hola",
         state=MicroserviceStateEnum.active,
         description="hola",
-        timestamp=datetime.now()
+        timestamp=datetime.fromisoformat('2011-11-04T00:05:23.283333')
     )
 ]
 
@@ -77,7 +77,7 @@ return_from_get_all = [
         apikey="hola",
         state=MicroserviceStateEnum.active,
         description="hola",
-        timestamp=datetime.now()
+        timestamp=datetime.fromisoformat('2011-11-04T00:05:23.283333')
     )
 ]
 
@@ -129,6 +129,7 @@ class MicroserviceMock(TestCase):
         assert data["apikey"] == "hola"
         assert data["state"] == "active"
         assert data["description"] == "hola"
+        assert data["timestamp"] == "2011-11-04T00:05:23.283333"
 
     @mock.patch.object(MicroserviceRepositoryPostgres, "get_microservice_by_name")
     def test_get_microservice_by_name(self, mock_get_by_name):
@@ -147,6 +148,7 @@ class MicroserviceMock(TestCase):
         assert data["apikey"] == "hola"
         assert data["state"] == "active"
         assert data["description"] == "hola"
+        assert data["timestamp"] == "2011-11-04T00:05:23.283333"
 
     @mock.patch.object(MicroserviceRepositoryPostgres, "get_microservices_by_name_list")
     def test_get_microservices_by_name_list(self, mock_get_by_name_list):
@@ -165,6 +167,7 @@ class MicroserviceMock(TestCase):
         assert data["microservices"][0]["apikey"] == "hola"
         assert data["microservices"][0]["state"] == "active"
         assert data["microservices"][0]["description"] == "hola"
+        assert data["microservices"][0]["timestamp"] == "2011-11-04T00:05:23.283333"
 
     @mock.patch.object(MicroserviceRepositoryPostgres, "get_all_microservices")
     def test_get_all_microservices(self, mock_get_all):
@@ -182,6 +185,7 @@ class MicroserviceMock(TestCase):
         assert data["microservices"][0]["apikey"] == "hola"
         assert data["microservices"][0]["state"] == "active"
         assert data["microservices"][0]["description"] == "hola"
+        assert data["microservices"][0]["timestamp"] == "2011-11-04T00:05:23.283333"
 
     @mock.patch.object(MicroserviceRepositoryPostgres, "delete_microservice")
     @mock.patch.object(MicroserviceRepositoryPostgres, "get_microservice")
@@ -219,3 +223,4 @@ class MicroserviceMock(TestCase):
         assert data["apikey"] == "hola"
         assert data["state"] == "blocked"
         assert data["description"] == "hola"
+        assert data["timestamp"] == "2011-11-04T00:05:23.283333"
