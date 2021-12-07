@@ -7,5 +7,11 @@ class UbademyException(Exception):
 
 class InvalidMicroserviceStateException(UbademyException):
     def __init__(self, detail):
-        msg = f"Microsercice has an invalid state: \"{detail}\". Expected values: are \"active\", \"blocked\" and \"blocked\""
+        msg = f"Microsercice has an invalid state: '{detail}'. Expected values: are 'active', 'blocked' and 'blocked'"
+        super().__init__(status_code=400, detail=msg)
+
+
+class UsedNameException(UbademyException):
+    def __init__(self, detail):
+        msg = f"There's a microservice with the name: '{detail}' already"
         super().__init__(status_code=400, detail=msg)
