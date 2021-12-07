@@ -97,7 +97,9 @@ update_body = {
 class MicroserviceMock(TestCase):
 
     @mock.patch.object(MicroserviceRepositoryPostgres, "add_microservice")
-    def test_create_microservice(self, mock_post):
+    @mock.patch.object(MicroserviceRepositoryPostgres, "get_microservice_by_name")
+    def test_create_microservice(self, mock_get_by_name, mock_post):
+        mock_get_by_name.return_value = None
         mock_post.return_value = None
 
         response = client.post(
@@ -204,9 +206,11 @@ class MicroserviceMock(TestCase):
         assert data["message"] == f"The microservice {microservice_id} was deleted successfully"
 
     @mock.patch.object(MicroserviceRepositoryPostgres, "update_microservice")
+    @mock.patch.object(MicroserviceRepositoryPostgres, "get_microservice_by_name")
     @mock.patch.object(MicroserviceRepositoryPostgres, "get_microservice")
-    def test_update_microservice(self, mock_get, mock_update):
+    def test_update_microservice(self, mock_get, mock_get_by_name, mock_update):
         mock_get.return_value = return_from_get
+        mock_get_by_name.return_value = return_from_get_by_name
         mock_update.return_value = None
 
         microservice_id = "5122b737-f815-4e15-a56d-abbff2fee900"

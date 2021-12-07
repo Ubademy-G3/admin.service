@@ -16,7 +16,7 @@ def add_microservice(db, args):
 
     other = mrp.get_microservice_by_name(db, args.name)
     if other is not None:
-        raise UsedNameException(args.name) 
+        raise UsedNameException(args.name)
 
     if args.description is None:
         args.description = "Non descriptive text"
