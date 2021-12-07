@@ -30,5 +30,8 @@ def update_microservice(db, microservice_id, new_args):
         if(new_args.state == "taken_down"):
             microservice_to_update.state = MicroserviceStateEnum.taken_down
 
+    if new_args.description is not None:
+        microservice_to_update.description = new_args.description
+
     mrp.update_microservice(db)
     return MicroserviceSerializer.serialize(microservice_to_update)
