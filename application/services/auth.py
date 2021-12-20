@@ -1,6 +1,9 @@
 import os
 from dotenv import load_dotenv
 from exceptions.auth_exception import ApiKeyException
+import logging
+
+logger = logging.getLogger(__name__)
 
 load_dotenv()
 
@@ -14,6 +17,7 @@ class AuthService:
 
         if api_key == self.api_key:
             return True
+        logger.warning("Api key %s is not valid", api_key)
         raise ApiKeyException()
 
 

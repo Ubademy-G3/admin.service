@@ -1,6 +1,9 @@
 from persistence.repositories.microservice_repository_postgres import MicroserviceRepositoryPostgres
 from exceptions.http_exception import NotFoundException
 from application.serializers.microservice_serializer import MicroserviceSerializer
+import logging
+
+logger = logging.getLogger(__name__)
 
 mrp = MicroserviceRepositoryPostgres()
 
@@ -8,6 +11,7 @@ mrp = MicroserviceRepositoryPostgres()
 def get_microservice(db, microservice_id):
     microservice = mrp.get_microservice(db, microservice_id)
     if microservice is None:
+        logger.warning("Microservice %s not found", microservice_id)
         raise NotFoundException("Microservice {}".format(microservice_id))
     return MicroserviceSerializer.serialize(microservice)
 
@@ -15,6 +19,7 @@ def get_microservice(db, microservice_id):
 def get_microservice_by_name(db, name):
     microservice = mrp.get_microservice_by_name(db, name)
     if microservice is None:
+        logger.warning("Microservice %s not found", name)
         raise NotFoundException("Microservice {}".format(name))
     return MicroserviceSerializer.serialize(microservice)
 
@@ -22,6 +27,7 @@ def get_microservice_by_name(db, name):
 def get_microservices_by_name_list(db, name_list):
     microservices = mrp.get_microservices_by_name_list(db, name_list)
     if microservices is None:
+        logger.warning("Microservices %s not found", str(name_list))
         raise NotFoundException("Microservice {}".format(name_list))
 
     microservice_list = []
