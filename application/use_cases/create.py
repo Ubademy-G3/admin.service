@@ -4,18 +4,24 @@ from infrastructure.db.microservice_schema import Microservice, MicroserviceStat
 from uuid import uuid4
 from exceptions.ubademy_exception import InvalidMicroserviceStateException, UsedNameException
 from datetime import datetime
+import logging
 
+logger = logging.getLogger(__name__)
 
 mrp = MicroserviceRepositoryPostgres()
 
 
 def add_microservice(db, args):
 
+    logger.info("Add new microservice")
+
     if (args.state is not None and args.state not in ["active", "blocked", "taken_down"]):
+        logger.error("Trying to create microservice "+args.name+" without or invalid state")
         raise InvalidMicroserviceStateException(args.state)
 
     other = mrp.get_microservice_by_name(db, args.name)
     if other is not None:
+        logger.error("Microservice "+args.name+" already exists")
         raise UsedNameException(args.name)
 
     if args.description is None:
