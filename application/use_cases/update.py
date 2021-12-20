@@ -13,7 +13,7 @@ mrp = MicroserviceRepositoryPostgres()
 def update_microservice(db, microservice_id, new_args):
 
     if (new_args.apikey is not None and new_args.apikey not in ["active", "blocked", "taken_down"]):
-        logger.warning("Invalid exam state in %s", new_args.id)
+        logger.warning("Invalid microservice state in %s", microservice_id)
         raise InvalidMicroserviceStateException(new_args.apikey)
 
     microservice_to_update = mrp.get_microservice(db, microservice_id)
@@ -43,7 +43,7 @@ def update_microservice(db, microservice_id, new_args):
     if new_args.description is not None:
         microservice_to_update.description = new_args.description
 
-    logger.debug("Update microservice %s", new_args.id)
+    logger.debug("Update microservice %s", microservice_id)
     mrp.update_microservice(db)
     logger.info("Microservice updated")
     return MicroserviceSerializer.serialize(microservice_to_update)
