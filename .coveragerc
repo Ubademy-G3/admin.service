@@ -1,0 +1,9 @@
+[report]
+omit = 
+        *__init__*
+        */exceptions/*
+        *infrastructure/routes/*
+        *monitoring/datadog.yml*
+        *infrastructure/db/database.py*
+        *persistence/repositories/*
+        *main.py*
